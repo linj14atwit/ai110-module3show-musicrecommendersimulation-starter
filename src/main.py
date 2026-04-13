@@ -20,7 +20,20 @@ def main() -> None:
         return
 
     # Starter example profile
-    user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8, "likes_acoustic": True}
+    # user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
+
+    # Edge case 1: happy high-energy pop fan
+    # Expects upbeat songs — risks getting Stadium Tears (high energy, but valence 0.28)
+    user_prefs = {"genre": "rock", "mood": "happy", "energy": 0.88}
+
+    # Edge case 2: relaxed jazz listener who wants slow, low-energy jazz
+    # Expects Afternoon Jazz (0.33 energy, 85bpm) — risks getting Samba Sunrise (172bpm)
+    # because tempo_bpm is not used in scoring, only danceability and genre match
+    # user_prefs = {"genre": "jazz", "mood": "relaxed", "energy": 0.33}
+
+    
+
+    print(f"User preferences: {user_prefs}")
 
     recommendations = recommend_songs(user_prefs, songs, k=5)
 

@@ -21,10 +21,11 @@ Describe the dataset the model uses.
 
 Prompts:  
 
-- How many songs are in the catalog  
-- What genres or moods are represented  
+- The catalog contains 22 songs.  
+- Genres represented: pop, lofi, rock, ambient, jazz, synthwave, indie pop, hip-hop (8 genres total).  
+- Moods represented: happy, chill, intense, relaxed, moody, focused (6 moods total).  
 - Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+- Several common taste dimensions are absent from the dataset: no classical, R&B, country, or metal genres; no "sad" or "angry" moods.
 
 ---
 
