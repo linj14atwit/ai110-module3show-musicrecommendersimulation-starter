@@ -66,6 +66,7 @@ acousticness_score:
   Rewards/penalizes based on the user's acoustic preference.
 
 ---
+![image](example.png)
 
 ## Getting Started
 
@@ -121,6 +122,8 @@ Examples:
 - It only works on a tiny catalog
 - It does not understand lyrics or language
 - It might over favor one genre or mood
+
+
 
 You will go deeper on this in your model card.
 

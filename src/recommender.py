@@ -1,6 +1,26 @@
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 
+MOOD_VALENCE = {
+    "happy":   0.85,
+    "relaxed": 0.70,
+    "chill":   0.60,
+    "focused": 0.55,
+    "intense": 0.50,
+    "moody":   0.40,
+}
+
+GENRE_SIMILARITY = {
+    frozenset({"pop",      "indie pop"}):  0.75,
+    frozenset({"lofi",     "ambient"}):    0.65,
+    frozenset({"lofi",     "jazz"}):       0.50,
+    frozenset({"pop",      "synthwave"}):  0.40,
+    frozenset({"jazz",     "ambient"}):    0.40,
+    frozenset({"rock",     "synthwave"}):  0.35,
+    frozenset({"indie pop","synthwave"}):  0.30,
+    frozenset({"pop",      "rock"}):       0.25,
+}
+
 @dataclass
 class Song:
     """
@@ -38,27 +58,72 @@ class Recommender:
         self.songs = songs
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
+        """Returns the top-k Song objects ranked by score for the given user."""
         # TODO: Implement recommendation logic
         return self.songs[:k]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
+        """Returns a human-readable string explaining why a song was recommended."""
         # TODO: Implement explanation logic
         return "Explanation placeholder"
 
 def load_songs(csv_path: str) -> List[Dict]:
-    """
-    Loads songs from a CSV file.
-    Required by src/main.py
-    """
-    # TODO: Implement CSV loading logic
-    print(f"Loading songs from {csv_path}...")
-    return []
+    """Reads a songs CSV and returns a list of song dicts with typed fields."""
+    import csv
+    songs = []
+    with open(csv_path, newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            songs.append({
+                "id":           int(row["id"]),
+                "title":        row["title"],
+                "artist":       row["artist"],
+                "genre":        row["genre"],
+                "mood":         row["mood"],
+                "energy":       float(row["energy"]),
+                "tempo_bpm":    float(row["tempo_bpm"]),
+                "valence":      float(row["valence"]),
+                "danceability": float(row["danceability"]),
+                "acousticness": float(row["acousticness"]),
+            })
+    return songs
+
+def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
+    """Returns a (score, reasons) tuple reflecting how well a song matches user preferences."""
+    user_genre    = user_prefs.get("genre", "")
+    song_genre    = song["genre"]
+    likes_acoustic = user_prefs.get("likes_acoustic", False)
+
+    energy_score = 1 - abs(song["energy"] - user_prefs.get("energy", 0.5))
+
+    if user_genre == song_genre:
+        genre_score = 1.0
+    else:
+        genre_score = GENRE_SIMILARITY.get(frozenset({user_genre, song_genre}), 0.0)
+
+    target_valence = MOOD_VALENCE.get(user_prefs.get("mood", ""), 0.60)
+    valence_score  = 1 - abs(song["valence"] - target_valence)
+
+    danceability_score = song["danceability"]
+
+    acousticness_score = song["acousticness"] if likes_acoustic else 1 - song["acousticness"]
+
+    weighted = {
+        "energy":       0.35 * energy_score,
+        "genre":        0.30 * genre_score,
+        "valence":      0.20 * valence_score,
+        "danceability": 0.10 * danceability_score,
+        "acousticness": 0.05 * acousticness_score,
+    }
+
+    score = sum(weighted.values())
+    top_component = max(weighted, key=weighted.get)
+    reasons = [f"Best match on {top_component} ({int(weighted[top_component]*100)} of {int(score*100)} total)"]
+
+    return score, reasons
 
 def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5) -> List[Tuple[Dict, float, str]]:
-    """
-    Functional implementation of the recommendation logic.
-    Required by src/main.py
-    """
-    # TODO: Implement scoring and ranking logic
-    # Expected return format: (song_dict, score, explanation)
-    return []
+    """Returns the top-k scored songs as (song_dict, score, explanation) tuples."""
+    scored = [(song, *score_song(user_prefs, song)) for song in songs]
+    ranked = sorted(scored, key=lambda x: x[1], reverse=True)
+    return [(song, score, reasons[0]) for song, score, reasons in ranked[:k]]
