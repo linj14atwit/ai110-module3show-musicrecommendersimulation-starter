@@ -10,6 +10,7 @@ Your goal is to:
 - Design a scoring rule that turns that data into recommendations
 - Evaluate what your system gets right and wrong
 - Reflect on how this mirrors real world AI recommenders
+This system takes the content-based filter part of real world AI recommenders.
 
 Replace this paragraph with your own summary of what your version does.
 
@@ -27,7 +28,42 @@ Some prompts to answer:
 - How does your `Recommender` compute a score for each song
 - How do you choose which songs to recommend
 
-You can include a simple diagram or bullet list if helpful.
+This algorithm is biased against acoustic preferences
+
+A weighted sum of five normalized [0,1] component scores:
+
+  score = 0.35 * energy_score
+        + 0.30 * genre_score
+        + 0.20 * valence_score
+        + 0.10 * danceability_score
+        + 0.05 * acousticness_score
+
+Component Scores
+
+energy_score:
+  1 - abs(song.energy - user.target_energy)
+  Penalizes songs far from the user's target energy.
+
+genre_score:
+  Look up (user.favorite_genre, song.genre) in GENRE_SIMILARITY table.
+  Exact match = 1.0. Similar genres = partial credit. Unrelated = 0.0.
+
+valence_score:
+  Map favorite_mood to a target valence via MOOD_VALENCE lookup, then:
+  1 - abs(song.valence - target_valence)
+  MOOD_VALENCE = {
+    "happy": 0.85, "relaxed": 0.70, "chill": 0.60,
+    "focused": 0.55, "intense": 0.50, "moody": 0.40
+  }
+
+danceability_score:
+  song.danceability (0–1 directly)
+  Higher danceability is always a positive rhythmic signal.
+
+acousticness_score:
+  song.acousticness         if user.likes_acoustic
+  1 - song.acousticness     if not user.likes_acoustic
+  Rewards/penalizes based on the user's acoustic preference.
 
 ---
 
