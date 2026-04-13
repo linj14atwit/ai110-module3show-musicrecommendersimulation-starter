@@ -1,5 +1,5 @@
 from typing import List, Dict, Tuple, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 
 MOOD_VALENCE = {
     "happy":   0.85,
@@ -59,13 +59,27 @@ class Recommender:
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
         """Returns the top-k Song objects ranked by score for the given user."""
-        # TODO: Implement recommendation logic
-        return self.songs[:k]
+        user_prefs = {
+            "genre": user.favorite_genre,
+            "mood": user.favorite_mood,
+            "energy": user.target_energy,
+            "likes_acoustic": user.likes_acoustic,
+        }
+        results = recommend_songs(user_prefs, [asdict(s) for s in self.songs], k)
+        return [Song(**song_dict) for song_dict, _, _ in results]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
         """Returns a human-readable string explaining why a song was recommended."""
-        # TODO: Implement explanation logic
-        return "Explanation placeholder"
+        user_prefs = {
+            "genre": user.favorite_genre,
+            "mood": user.favorite_mood,
+            "energy": user.target_energy,
+            "likes_acoustic": user.likes_acoustic,
+        }
+        _, reasons = score_song(user_prefs, asdict(song))
+        components = " and ".join(component for component, _ in reasons)
+        # combined = sum(score for _, score in reasons)
+        return f"Recommended mainly for {components}"
 
 def load_songs(csv_path: str) -> List[Dict]:
     """Reads a songs CSV and returns a list of song dicts with typed fields."""
@@ -117,8 +131,8 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     }
 
     score = sum(weighted.values())
-    top_component = max(weighted, key=weighted.get)
-    reasons = [f"Best match on {top_component} ({int(weighted[top_component]*100)} of {int(score*100)} total)"]
+    top_two = sorted(weighted, key=weighted.get, reverse=True)[:2]
+    reasons = tuple((component, int(weighted[component] * 100)) for component in top_two)
 
     return score, reasons
 
