@@ -2,19 +2,14 @@
 
 ## LookForSongsIlike2000DX 1.0
 
----
-
 ## 2. Intended Use  
 
 
-The recommender recommends songs from a given list to the user based on their preference. This tool is best used when a user wants to quickly find songs that fit them in a list of unfamiliar songs.
+The recommender recommends songs from a predefined list to the user based on their preference. 
 
 ---
 
 ## 3. How the Model Works  
-
-Explain your scoring approach in simple language.  
-
 
 The recommender takes the energy, the genre, the mood, danceability and acousticness into coinsideration when recommending songs.
 
@@ -39,9 +34,9 @@ Where does your system seem to work well
 
 Prompts:  
 
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+The system best fits listeners that are loyal to their genre and energy consistent, essentially listeners who know exactly what they want. 
+The recommender also offer little variety in its recommendation so don't expect it to give you varying results on different days.
+
 
 ---
 
@@ -73,23 +68,14 @@ No need for numeric metrics unless you created some.
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+- further expand the genre relating table to allow more mixed genres.
+- Better and more detailed recommendation explaination.  
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
-
-Prompts:  
-
 - What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+- nothing about music is suppose to be binary, components are always in a spectrum and often a multi dimension one. The weight of some components also change in based on the value of another based on a persons taste. 
+Basically the perfect recommender doesn't exist and all of them come with some compromise.
+A good recommender however captures the aspects of a persons taste well and will be able to offer variety and exploration.
