@@ -19,3 +19,5 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 18,Afternoon Jazz,The Quarter,jazz,relaxed,0.33,85,0.74,0.50,0.91
 19,Candy Lights,Lumi,pop,happy,0.78,120,0.88,0.85,0.20
 20,Deep Focus,LoRoom,lofi,focused,0.38,75,0.57,0.63,0.80
+21,Stadium Tears,Echo Vault,rock,moody,0.89,138,0.28,0.57,0.12
+22,Samba Sunrise,Rio Static,jazz,happy,0.71,172,0.80,0.93,0.88

@@ -111,6 +111,12 @@ Use this section to document the experiments you ran. For example:
 - What happened when you added tempo or valence to the score
 - How did your system behave for different types of users
 
+edge cases:
+1. high tempo latin jazz being recommended for relaxed low energy
+![image](edgecase1.png)
+2. sad power ballads being recommended for happy rock
+![image](edgecase2.png)
+
 ---
 
 ## Limitations and Risks

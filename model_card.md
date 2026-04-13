@@ -1,21 +1,13 @@
 # 🎧 Model Card: Music Recommender Simulation
 
-## 1. Model Name  
-
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+## LookForSongsIlike2000DX 1.0
 
 ---
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
 
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+The recommender recommends songs from a given list to the user based on their preference. This tool is best used when a user wants to quickly find songs that fit them in a list of unfamiliar songs.
 
 ---
 
@@ -23,14 +15,8 @@ Prompts:
 
 Explain your scoring approach in simple language.  
 
-Prompts:  
 
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+The recommender takes the energy, the genre, the mood, danceability and acousticness into coinsideration when recommending songs.
 
 ---
 
@@ -63,12 +49,10 @@ Prompts:
 
 Where the system struggles or behaves unfairly. 
 
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
+- conficting edgecases such as high tempo latin jazz or high energy sad power ballads can be confusing to the recommender.
+- Genres is over prioritized which suppresses discovery across genre line.
+- acoustic is binary and not a spectrum.
+- the scoring favors dancability over calm or ambient.
 
 ---
 
